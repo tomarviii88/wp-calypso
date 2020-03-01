@@ -10,6 +10,7 @@ import { includes, get, startsWith } from 'lodash';
 /**
  * Internal dependencies
  */
+import AsyncLoad from 'components/async-load';
 import config from 'config';
 import GlobalNotices from 'components/global-notices';
 import MasterbarLoggedOut from 'layout/masterbar/logged-out';
@@ -21,7 +22,6 @@ import { getCurrentRoute } from 'state/selectors/get-current-route';
 import getCurrentQueryArguments from 'state/selectors/get-current-query-arguments';
 import { getSection, masterbarIsVisible } from 'state/ui/selectors';
 import BodySectionCssClass from './body-section-css-class';
-import GdprBanner from 'blocks/gdpr-banner';
 
 /**
  * Style dependencies
@@ -116,7 +116,9 @@ const LayoutLoggedOut = ( {
 					{ secondary }
 				</div>
 			</div>
-			{ config.isEnabled( 'gdpr-banner' ) && <GdprBanner /> }
+			{ config.isEnabled( 'gdpr-banner' ) && (
+				<AsyncLoad require="blocks/gdpr-banner" placeholder={ null } />
+			) }
 		</div>
 	);
 };
