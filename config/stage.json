@@ -41,8 +41,6 @@
 		"happychat": true,
 		"help": true,
 		"help/courses": true,
-		"ive/me": false,
-		"ive/use-external-defs": false,
 		"ive/use-external-assignment": false,
 		"jetpack/api-cache": true,
 		"jetpack/blocks/beta": true,
