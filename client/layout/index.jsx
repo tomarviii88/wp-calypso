@@ -13,7 +13,6 @@ import classnames from 'classnames';
  */
 import AsyncLoad from 'components/async-load';
 import MasterbarLoggedIn from 'layout/masterbar/logged-in';
-import GlobalNotices from 'components/global-notices';
 import HtmlIsIframeClassname from 'layout/html-is-iframe-classname';
 import notices from 'notices';
 import config from 'config';
@@ -165,7 +164,7 @@ class Layout extends Component {
 							sectionName={ this.props.sectionName }
 						/>
 					) }
-					<GlobalNotices id="notices" notices={ notices.list } />
+					<AsyncLoad require="components/global-notices" id="notices" notices={ notices.list } />
 					<div id="secondary" className="layout__secondary" role="navigation">
 						{ this.props.secondary }
 					</div>
