@@ -17,8 +17,10 @@ import {
 	FormFieldAnnotation,
 	translateCheckoutPaymentMethodToWpcomPaymentMethod,
 	areDomainsInLineItems,
-	domainManagedContactDetails,
-	taxManagedContactDetails,
+    emptyManagedContactDetails,
+    applyContactDetailsRequiredMask,
+	domainRequiredContactDetails,
+	taxRequiredContactDetails,
 	areRequiredFieldsNotEmpty,
 } from '@automattic/composite-checkout-wpcom';
 import {
@@ -296,7 +298,10 @@ export default function CompositeCheckout( {
 	useWpcomStore(
 		registerStore,
 		recordEvent,
-		areDomainsInLineItems( items ) ? domainManagedContactDetails : taxManagedContactDetails,
+		applyContactDetailsRequiredMask(
+		    emptyManagedContactDetails,
+            areDomainsInLineItems( items ) ? domainRequiredContactDetails : taxRequiredContactDetails
+        ),
 		updateContactDetailsCache
 	);
 
