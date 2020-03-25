@@ -11,6 +11,7 @@ import momentDate from 'moment';
  * Internal dependencies
  */
 import DocumentHead from 'components/data/document-head';
+import { Card } from '@automattic/components';
 import { updateFilter } from 'state/activity-log/actions';
 import {
 	getBackupAttemptsForDate,
@@ -157,7 +158,13 @@ class BackupsPage extends Component {
 				<QueryRewindState siteId={ siteId } />
 				<QuerySitePurchases siteId={ siteId } />
 				<QuerySiteSettings siteId={ siteId } />
-				{ isRewindMissingPlan ? <BackupUpsell /> : this.renderBackupPicker() }
+				{ isRewindMissingPlan ? (
+					<Card>
+						<BackupUpsell />
+					</Card>
+				) : (
+					this.renderBackupPicker()
+				) }
 			</Main>
 		);
 	}
