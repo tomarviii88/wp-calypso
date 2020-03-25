@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import debug from 'debug';
+
+/**
  * Internal dependencies
  */
 import analytics from 'lib/analytics';
@@ -7,6 +12,8 @@ import {
 	adTrackSignupComplete,
 	adTrackRegistration,
 } from 'lib/analytics/ad-tracking';
+
+const signupDebug = debug( 'calypso:analytics:signup' );
 
 export function recordSignupStart( flow, ref ) {
 	// Tracks
@@ -66,29 +73,15 @@ export function recordSignupInvalidStep( flow, step ) {
 	analytics.tracks.recordEvent( 'calypso_signup_goto_invalid_step', { flow, step } );
 }
 
-export function recordRegistration( flow ) {
+export function recordRegistration( { userData, flow, type } ) {
+	signupDebug( 'recordRegistration:', { userData, flow, type } );
+
+	// Tracks user identification
+	analytics.identifyUser( userData );
 	// Tracks
-	analytics.tracks.recordEvent( 'calypso_user_registration_complete', { flow } );
+	analytics.tracks.recordEvent( 'calypso_user_registration_complete', { flow, type } );
 	// Google Analytics
 	analytics.ga.recordEvent( 'Signup', 'calypso_user_registration_complete' );
-	// Marketing
-	adTrackRegistration();
-}
-
-export function recordPasswordlessRegistration( flow ) {
-	// Tracks
-	analytics.tracks.recordEvent( 'calypso_user_registration_passwordless_complete', { flow } );
-	// Google Analytics
-	analytics.ga.recordEvent( 'Signup', 'calypso_user_registration_passwordless_complete' );
-	// Marketing
-	adTrackRegistration();
-}
-
-export function recordSocialRegistration() {
-	// Tracks
-	analytics.tracks.recordEvent( 'calypso_user_registration_social_complete' );
-	// Google Analytics
-	analytics.ga.recordEvent( 'Signup', 'calypso_user_registration_social_complete' );
 	// Marketing
 	adTrackRegistration();
 }
