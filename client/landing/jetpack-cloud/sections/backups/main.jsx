@@ -18,29 +18,31 @@ import {
 	getEventsInDailyBackup,
 	getMetaDiffForDailyBackup,
 } from './utils';
+import { applySiteOffset } from 'lib/site/timezone';
 import { getSelectedSiteId } from 'state/ui/selectors';
 import { requestActivityLogs } from 'state/data-getters';
 import { withLocalizedMoment } from 'components/localized-moment';
+import ActivityCard from '../../components/activity-card';
 import BackupDelta from '../../components/backup-delta';
+import BackupUpsell from './components/upsell';
 import DailyBackupStatus from '../../components/daily-backup-status';
 import DatePicker from '../../components/date-picker';
+import Filterbar from 'my-sites/activity/filterbar';
+import getActivityLogFilter from 'state/selectors/get-activity-log-filter';
+import getDoesRewindNeedCredentials from 'state/selectors/get-does-rewind-need-credentials.js';
+import getIsRewindMissingPlan from 'state/selectors/get-is-rewind-missing-plan';
 import getRewindState from 'state/selectors/get-rewind-state';
 import getSelectedSiteSlug from 'state/ui/selectors/get-selected-site-slug';
-import QueryRewindState from 'components/data/query-rewind-state';
-import QuerySitePurchases from 'components/data/query-site-purchases';
-import Main from 'components/main';
-import SidebarNavigation from 'my-sites/sidebar-navigation';
-import getActivityLogFilter from 'state/selectors/get-activity-log-filter';
-import Filterbar from 'my-sites/activity/filterbar';
-import ActivityCard from '../../components/activity-card';
-import siteSupportsRealtimeBackup from 'state/selectors/site-supports-realtime-backup';
-import Pagination from 'components/pagination';
-import MissingCredentialsWarning from '../../components/missing-credentials';
-import getDoesRewindNeedCredentials from 'state/selectors/get-does-rewind-need-credentials.js';
 import getSiteGmtOffset from 'state/selectors/get-site-gmt-offset';
 import getSiteTimezoneValue from 'state/selectors/get-site-timezone-value';
-import { applySiteOffset } from 'lib/site/timezone';
+import Main from 'components/main';
+import MissingCredentialsWarning from '../../components/missing-credentials';
+import Pagination from 'components/pagination';
+import QueryRewindState from 'components/data/query-rewind-state';
+import QuerySitePurchases from 'components/data/query-site-purchases';
 import QuerySiteSettings from 'components/data/query-site-settings'; // Required to get site time offset
+import SidebarNavigation from 'my-sites/sidebar-navigation';
+import siteSupportsRealtimeBackup from 'state/selectors/site-supports-realtime-backup';
 
 /**
  * Style dependencies
@@ -146,6 +148,26 @@ class BackupsPage extends Component {
 	};
 
 	renderMain() {
+		const { isRewindMissingPlan, siteId } = this.props;
+
+		return (
+			<Main>
+				<DocumentHead title="Backups" />
+				<SidebarNavigation />
+				<QueryRewindState siteId={ siteId } />
+				<QuerySitePurchases siteId={ siteId } />
+				<QuerySiteSettings siteId={ siteId } />
+				{ isRewindMissingPlan ? <BackupUpsell /> : this.renderBackupPicker() }
+			</Main>
+		);
+	}
+
+	changePage = pageNumber => {
+		this.props.selectPage( this.props.siteId, pageNumber );
+		window.scrollTo( 0, 0 );
+	};
+
+	renderBackupPicker() {
 		const {
 			allowRestore,
 			doesRewindNeedCredentials,
@@ -169,13 +191,7 @@ class BackupsPage extends Component {
 		const metaDiff = getMetaDiffForDailyBackup( logs, selectedDateString );
 
 		return (
-			<Main>
-				<DocumentHead title="Backups" />
-				<SidebarNavigation />
-				<QueryRewindState siteId={ siteId } />
-				<QuerySitePurchases siteId={ siteId } />
-				<QuerySiteSettings siteId={ siteId } />
-
+			<>
 				<DatePicker
 					onDateChange={ this.onDateChange }
 					selectedDate={ selectedDate }
@@ -211,14 +227,9 @@ class BackupsPage extends Component {
 						/>
 					</>
 				) }
-			</Main>
+			</>
 		);
 	}
-
-	changePage = pageNumber => {
-		this.props.selectPage( this.props.siteId, pageNumber );
-		window.scrollTo( 0, 0 );
-	};
 
 	renderActivityLog() {
 		const { allowRestore, filter, logs, moment, siteId } = this.props;
@@ -351,7 +362,6 @@ const mapStateToProps = state => {
 	const rewind = getRewindState( state, siteId );
 	const restoreStatus = rewind.rewind && rewind.rewind.status;
 	const doesRewindNeedCredentials = getDoesRewindNeedCredentials( state, siteId );
-	const hasRealtimeBackups = siteSupportsRealtimeBackup( state, siteId );
 	const allowRestore =
 		'active' === rewind.state && ! ( 'queued' === restoreStatus || 'running' === restoreStatus );
 
@@ -363,16 +373,17 @@ const mapStateToProps = state => {
 		allowRestore,
 		doesRewindNeedCredentials,
 		filter,
-		hasRealtimeBackups,
+		hasRealtimeBackups: siteSupportsRealtimeBackup( state, siteId ),
+		indexedLog,
+		isLoadingBackups,
+		isRewindMissingPlan: getIsRewindMissingPlan( state, siteId ),
 		logs: logs?.data ?? [],
+		oldestDateAvailable,
 		rewind,
+		siteGmtOffset,
 		siteId,
 		siteSlug: getSelectedSiteSlug( state ),
 		siteTimezone,
-		siteGmtOffset,
-		indexedLog,
-		oldestDateAvailable,
-		isLoadingBackups,
 	};
 };
 
