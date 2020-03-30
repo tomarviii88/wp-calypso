@@ -680,11 +680,11 @@ export default function CompositeCheckout( {
 		shouldShowContactDetailsValidationErrors,
 		isDisabled
 	) => {
-        debug( 'contactDetails:', contactDetails );
-        debug( 'tldExtraContactDetails:', tldExtraContactDetails );
+		debug( 'contactDetails:', contactDetails );
+		debug( 'tldExtraContactDetails:', tldExtraContactDetails );
 		const getIsFieldDisabled = () => isDisabled;
 		const tlds = getAllTlds( domainNames );
-        
+
 		return (
 			<WPCheckoutErrorBoundary>
 				<ContactDetailsFormFields
