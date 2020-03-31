@@ -702,6 +702,9 @@ export default function CompositeCheckout( {
 						contactDetails={ contactDetails }
 						ccTldDetails={ tldExtraContactDetails?.ca }
 						onContactDetailsChange={ updateDomainContactFields }
+						contactDetailsValidationErrors={
+							shouldShowContactDetailsValidationErrors ? contactDetailsErrors : {}
+						}
 						tld={ 'ca' }
 						getDomainNames={ () => domainNames }
 						translate={ translate }
@@ -712,6 +715,9 @@ export default function CompositeCheckout( {
 						contactDetails={ contactDetails }
 						ccTldDetails={ tldExtraContactDetails?.uk }
 						onContactDetailsChange={ updateDomainContactFields }
+						contactDetailsValidationErrors={
+							shouldShowContactDetailsValidationErrors ? contactDetailsErrors : {}
+						}
 						tld={ 'uk' }
 						getDomainNames={ () => domainNames }
 						translate={ translate }
@@ -722,6 +728,9 @@ export default function CompositeCheckout( {
 						contactDetails={ contactDetails }
 						ccTldDetails={ tldExtraContactDetails?.fr }
 						onContactDetailsChange={ updateDomainContactFields }
+						contactDetailsValidationErrors={
+							shouldShowContactDetailsValidationErrors ? contactDetailsErrors : {}
+						}
 						tld={ 'fr' }
 						getDomainNames={ () => domainNames }
 						translate={ translate }
