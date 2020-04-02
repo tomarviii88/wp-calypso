@@ -23,6 +23,7 @@ import {
 	taxRequiredContactDetails,
 	prepareDomainContactValidationRequest,
 	areRequiredFieldsNotEmpty,
+	formatDomainContactValidationResponse,
 } from '@automattic/composite-checkout-wpcom';
 import {
 	CheckoutProvider,
@@ -624,49 +625,54 @@ export default function CompositeCheckout( {
 		paymentMethodId,
 		contactDetails,
 		domainNames,
-		applyDomainContactValidationResults,
-		decoratedContactDetails
+		applyDomainContactValidationResults
 	) => {
 		return new Promise( resolve => {
-			const { contact_information, domain_names } = prepareDomainContactValidationRequest(
-				domainNames,
-				contactDetails
+			const {
+				contact_information,
+				domain_names,
+				qualify_properties,
+			} = prepareDomainContactValidationRequest( domainNames, contactDetails );
+			validateDomainContact(
+				contact_information,
+				domain_names,
+				( httpErrors, data ) => {
+					recordEvent( {
+						type: 'VALIDATE_DOMAIN_CONTACT_INFO',
+						payload: {
+							credits: null,
+							payment_method: translateCheckoutPaymentMethodToWpcomPaymentMethod( paymentMethodId ),
+						},
+					} );
+					debug(
+						'Domain contact info validation for domains',
+						domainNames,
+						'and contact info',
+						contactDetails,
+						'result:',
+						data
+					);
+					if ( ! data ) {
+						showErrorMessage(
+							translate(
+								'There was an error validating your contact information. Please contact support.'
+							)
+						);
+						resolve( false );
+						return;
+					}
+					if ( data.messages ) {
+						showErrorMessage(
+							translate(
+								'We could not validate your contact information. Please review and update all the highlighted fields.'
+							)
+						);
+					}
+					applyDomainContactValidationResults( formatDomainContactValidationResponse( data ) );
+					resolve( ! ( data.success && areRequiredFieldsNotEmpty( contactDetails ) ) );
+				},
+				qualify_properties
 			);
-			validateDomainContact( contact_information, domain_names, ( httpErrors, data ) => {
-				recordEvent( {
-					type: 'VALIDATE_DOMAIN_CONTACT_INFO',
-					payload: {
-						credits: null,
-						payment_method: translateCheckoutPaymentMethodToWpcomPaymentMethod( paymentMethodId ),
-					},
-				} );
-				debug(
-					'Domain contact info validation for domains',
-					domainNames,
-					'and contact info',
-					contactDetails,
-					'result:',
-					data
-				);
-				if ( ! data ) {
-					showErrorMessage(
-						translate(
-							'There was an error validating your contact information. Please contact support.'
-						)
-					);
-					resolve( false );
-					return;
-				}
-				if ( data.messages ) {
-					showErrorMessage(
-						translate(
-							'We could not validate your contact information. Please review and update all the highlighted fields.'
-						)
-					);
-				}
-				applyDomainContactValidationResults( data );
-				resolve( ! ( data.success && areRequiredFieldsNotEmpty( decoratedContactDetails ) ) );
-			} );
 		} );
 	};
 
