@@ -668,19 +668,28 @@ function mapKeysRecursively( object, fn ) {
 /**
  * Validates the specified domain contact information against a list of domain names.
  *
+ * Options:
+ *   qualifyProperties: If set and true, qualifies any nested property names in the returned error list
+ *
  * @param {object} contactInformation - user's contact information
  * @param {string[]} domainNames - list of domain names
  * @param {Function} fn The callback function
+ * @param {object | null} options Endpoint options. See docblock for a detailed list.
  */
 Undocumented.prototype.validateDomainContactInformation = function(
 	contactInformation,
 	domainNames,
-	fn
+	fn,
+	options
 ) {
 	let data = {
 		contactInformation: contactInformation,
 		domainNames: domainNames,
 	};
+
+	if ( options && options.qualifyProperties ) {
+		data.qualifyProperties = options.qualifyProperties;
+	}
 
 	debug( '/me/domain-contact-information/validate query' );
 	data = mapKeysRecursively( data, snakeCase );
