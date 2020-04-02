@@ -528,10 +528,6 @@ export function prepareDomainContactValidationRequest(
 export function formatDomainContactValidationResponse(
 	response: DomainContactValidationResponse
 ): ManagedContactDetailsErrors {
-	const optionalToArray: ( x: undefined | string ) => undefined | string[] = x => {
-		return x ? [ x ] : undefined;
-	};
-
 	const tldExtraFields: ManagedContactDetailsTldExtraFieldsShape< undefined | string[] > = {};
 
 	// TODO: figure out how the extra fields errors are formatted
