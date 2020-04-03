@@ -97,7 +97,6 @@ import getPreviousPath from 'state/selectors/get-previous-path.js';
 import { getPlan, findPlansKeys } from 'lib/plans';
 import { GROUP_WPCOM, TERM_ANNUALLY, TERM_BIENNIALLY, TERM_MONTHLY } from 'lib/plans/constants';
 import { getTld } from 'lib/domains';
-import { computeProductsWithPrices } from 'state/products-list/selectors';
 import { requestProductsList } from 'state/products-list/actions';
 import PageViewTracker from 'lib/analytics/page-view-tracker';
 import analytics from 'lib/analytics';
