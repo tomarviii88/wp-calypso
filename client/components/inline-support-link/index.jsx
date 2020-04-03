@@ -4,7 +4,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { localize } from 'i18n-calypso';
+import { localize, getLocaleSlug } from 'i18n-calypso';
 import Gridicon from 'components/gridicon';
 
 /**
@@ -40,7 +40,7 @@ class InlineSupportLink extends Component {
 	handleClick = event => {
 		const { supportPostId, supportLink } = this.props;
 
-		if ( ! supportPostId ) {
+		if ( ! supportPostId || 'en' !== getLocaleSlug() ) {
 			return null;
 		}
 
