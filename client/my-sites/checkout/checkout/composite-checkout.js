@@ -670,7 +670,7 @@ export default function CompositeCheckout( {
 					applyDomainContactValidationResults( formatDomainContactValidationResponse( data ) );
 					resolve( ! ( data.success && areRequiredFieldsNotEmpty( contactDetails ) ) );
 				},
-				qualify_properties
+				{ qualifyProperties: qualify_properties }
 			);
 		} );
 	};
