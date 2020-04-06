@@ -7,6 +7,7 @@ import React from 'react';
  * Internal dependencies
  */
 import { SiteOffsetProvider } from 'landing/jetpack-cloud/components/site-offset/context';
+import BackupActivityLogPage from './backup-activity-log';
 import BackupDetailPage from './detail';
 import BackupRewindFlow, { RewindFlowPurpose } from './rewind-flow';
 import BackupsPage from './main';
@@ -21,6 +22,12 @@ export function wrapInSiteOffsetProvider( context, next ) {
 /* handles /backups/:site, see `backupMainPath` */
 export function backups( context, next ) {
 	context.primary = <BackupsPage />;
+	next();
+}
+
+/* handles /backups/activity/:site, see `backupsActivityPath` */
+export function backupActivity( context, next ) {
+	context.primary = <BackupActivityLogPage />;
 	next();
 }
 
