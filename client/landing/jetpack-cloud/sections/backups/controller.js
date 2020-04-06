@@ -9,10 +9,17 @@ import React from 'react';
 import BackupDetailPage from './detail';
 import BackupsPage from './main';
 import BackupRewindFlow, { RewindFlowPurpose } from './rewind-flow';
+import BackupActivityLogPage from './backup-activity-log';
 
 /* handles /backups/:site, see `backupMainPath` */
 export function backups( context, next ) {
 	context.primary = <BackupsPage />;
+	next();
+}
+
+/* handles /backups/activity/:site, see `backupsActivityPath` */
+export function backupActivity( context, next ) {
+	context.primary = <BackupActivityLogPage />;
 	next();
 }
 
