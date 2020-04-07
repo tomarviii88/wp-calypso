@@ -221,7 +221,7 @@ class BackupsPage extends Component {
 	};
 
 	renderActivityLog() {
-		const { allowRestore, filter, logs, moment, siteId } = this.props;
+		const { allowRestore, filter, logs, moment, siteId, siteSlug } = this.props;
 		const { page: requestedPage } = filter;
 
 		const actualPage = Math.max(
@@ -237,6 +237,7 @@ class BackupsPage extends Component {
 					moment,
 					activity,
 					allowRestore,
+					siteSlug,
 				} }
 			/>
 		) );
