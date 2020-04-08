@@ -123,4 +123,13 @@ export default {
 		},
 		defaultVariation: 'control',
 	},
+	domainStepPlanStepSwap: {
+		datestamp: '20200408',
+		variations: {
+			variantShowSwapped: 50,
+			control: 50,
+		},
+		defaultVariation: 'control',
+		allowExistingUsers: true,
+	},
 };
