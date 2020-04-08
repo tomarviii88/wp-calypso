@@ -8,7 +8,7 @@
 	"sideEffects": false,
 	"scripts": {
 		"clean": "npx rimraf dist \"../../.tsc-cache/packages__composite-checkout-wpcom*\"",
-		"prepublish": "npm run clean",
+		"prepublish": "yarn run clean",
 		"prepare": "tsc --project ./tsconfig.json && tsc --project ./tsconfig-cjs.json",
 		"typecheck": "tsc --project ./tsconfig.json"
 	},
