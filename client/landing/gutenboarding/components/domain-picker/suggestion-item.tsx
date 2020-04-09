@@ -33,7 +33,7 @@ const DomainPickerSuggestionItem: FunctionComponent< Props > = ( {
 				checked={ isSelected }
 			/>
 			<div className="domain-picker__suggestion-item-name">
-				<span class="domain-picker__domain-name">{ suggestion.domain_name }</span>
+				<span className="domain-picker__domain-name">{ suggestion.domain_name }</span>
 				{ isRecommended && (
 					<div className="domain-picker__badge is-recommended">{ __( 'Recommended' ) }</div>
 				) }
