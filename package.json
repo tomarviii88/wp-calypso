@@ -267,6 +267,7 @@
 		"react-docgen-typescript-loader": "3.6.0",
 		"react-test-renderer": "16.12.0",
 		"readline-sync": "1.4.10",
+		"redux-dynamic-middlewares": "2.0.0",
 		"replace": "1.1.5",
 		"rimraf": "3.0.0",
 		"sinon": "7.5.0",
@@ -304,8 +305,5 @@
 			"pre-commit": "npm run -s install-if-no-packages && node bin/pre-commit-hook.js",
 			"pre-push": "npm run -s install-if-no-packages && node bin/pre-push-hook.js"
 		}
-	},
-	"devDependencies": {
-		"redux-dynamic-middlewares": "2.0.0"
 	}
 }
