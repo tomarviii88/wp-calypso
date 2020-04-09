@@ -36,7 +36,6 @@ import { getSelectedSite, getSelectedSiteId, getSelectedSiteSlug } from 'state/u
 import guessTimezone from 'lib/i18n-utils/guess-timezone';
 import { preventWidows } from 'lib/formatting';
 import scrollTo from 'lib/scroll-to';
-import isSiteComingSoon from 'state/selectors/is-site-coming-soon';
 import isUnlaunchedSite from 'state/selectors/is-unlaunched-site';
 import isVipSite from 'state/selectors/is-vip-site';
 import { isCurrentUserEmailVerified } from 'state/current-user/selectors';
@@ -44,7 +43,6 @@ import { launchSite } from 'state/sites/launch/actions';
 import { getDomainsBySiteId } from 'state/sites/domains/selectors';
 import QuerySiteDomains from 'components/data/query-site-domains';
 import FormInputCheckbox from 'components/forms/form-checkbox';
-import { hasLocalizedText } from 'blocks/eligibility-warnings/has-localized-text';
 
 export class SiteSettingsFormGeneral extends Component {
 	componentDidMount() {
@@ -506,7 +504,7 @@ export class SiteSettingsFormGeneral extends Component {
 	}
 
 	renderLaunchSite() {
-		const { translate, siteDomains, siteSlug, siteId, isPaidPlan, isComingSoon } = this.props;
+		const { translate, siteDomains, siteSlug, siteId, isPaidPlan } = this.props;
 
 		const launchSiteClasses = classNames( 'site-settings__general-settings-launch-site-button', {
 			'site-settings__disable-privacy-settings': ! siteDomains.length,
@@ -533,10 +531,7 @@ export class SiteSettingsFormGeneral extends Component {
 				<Card className="site-settings__general-settings-launch-site">
 					<div className="site-settings__general-settings-launch-site-text">
 						<p>
-							{ isComingSoon &&
-							hasLocalizedText(
-								'Your site hasn\'t been launched yet. It is hidden from visitors behind a "Coming Soon" notice until it is launched.'
-							)
+							{ btnText
 								? translate(
 										'Your site hasn\'t been launched yet. It is hidden from visitors behind a "Coming Soon" notice until it is launched.'
 								  )
@@ -712,7 +707,6 @@ const connectComponent = connect(
 				? ownProps.withComingSoonOption
 				: 'variant' === abtest( 'ATPrivacy' ),
 			isUnlaunchedSite: isUnlaunchedSite( state, siteId ),
-			isComingSoon: isSiteComingSoon( state, siteId ),
 			needsVerification: ! isCurrentUserEmailVerified( state ),
 			siteIsJetpack,
 			siteIsVip: isVipSite( state, siteId ),
