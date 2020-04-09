@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { isMobile } from '@automattic/viewport';
 import React, { Component } from 'react';
 import momentDate from 'moment';
+import { includes } from 'lodash';
 
 /**
  * Internal dependencies
@@ -146,7 +147,7 @@ class BackupsPage extends Component {
 		const {
 			allowRestore,
 			doesRewindNeedCredentials,
-			hasRealtimeBackups,
+			siteCapabilities,
 			logs,
 			moment,
 			siteId,
@@ -158,15 +159,13 @@ class BackupsPage extends Component {
 		} = this.props;
 
 		const backupsOnSelectedDate = this.getBackupLogsFor( this.getSelectedDate() );
-
 		const selectedDateString = this.TO_REMOVE_getSelectedDateString();
-
 		const today = applySiteOffset( moment(), { timezone, gmtOffset } );
-
 		const backupAttempts = getBackupAttemptsForDate( logs, selectedDateString );
 		const deltas = getDailyBackupDeltas( logs, selectedDateString );
 		const realtimeEvents = getEventsInDailyBackup( logs, selectedDateString );
 		const metaDiff = getMetaDiffForDailyBackup( logs, selectedDateString );
+		const hasRealtimeBackups = includes( siteCapabilities, 'backup-realtime' );
 
 		return (
 			<Main>
@@ -364,7 +363,7 @@ const mapStateToProps = state => {
 		allowRestore,
 		doesRewindNeedCredentials,
 		filter,
-		hasRealtimeBackups: siteCapabilities.includes( 'backup-realtime' ),
+		siteCapabilities,
 		logs: logs?.data ?? [],
 		rewind,
 		siteId,
