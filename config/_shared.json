@@ -137,5 +137,6 @@
 		"backups": false,
 		"jetpack-cloud-settings": false
 	},
+	"site_filter": [],
 	"theme": "default"
 }
